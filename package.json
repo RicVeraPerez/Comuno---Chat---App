@@ -1,7 +1,10 @@
 {
   "name": "comuno",
   "version": "1.0.0",
+  "homepage": "https://RicVeraPerez.github.io/Comuno---Chat---App",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "build": "cd Front-end && npm install && npm run build && cd ../Back-end && npm install",
     "start": "npm run build && node Back-end/src/index.js"
   },
