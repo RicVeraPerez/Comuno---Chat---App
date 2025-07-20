@@ -31,8 +31,8 @@ app.use(
 );
 
 
-app.use("/api/auth", authRoutes);
-app.use("/api/messages", messageRoutes);
+app.use("/auth", authRoutes);
+app.use("/messages", messageRoutes);
 
 
 console.log("PORT env variable:", process.env.PORT);
