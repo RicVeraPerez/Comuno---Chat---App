@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+  base: "./",
   server: {
     proxy: {
       // Aquí le dices que todo lo que empiece con /api lo redirija al backend
