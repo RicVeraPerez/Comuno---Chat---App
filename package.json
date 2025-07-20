@@ -1,6 +1,7 @@
 {
   "name": "comuno",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "build": "npm install --prefix Back-end && npm install --prefix Front-end && npm run build --prefix Front-end",
@@ -8,9 +9,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "vite": "^7.0.5"
-  }
+  "license": "ISC"
 }
