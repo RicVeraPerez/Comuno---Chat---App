@@ -2,8 +2,8 @@
   "name": "comuno",
   "version": "1.0.0",
   "scripts": {
-    "build": "cd Front-end && npm ci && npm run build",
-    "start": "npm ci --prefix Back-end && npm start --prefix Back-end"
+    "build": "cd Front-end && npm install && npm run build && cd ../Back-end && npm install",
+    "start": "npm run build && node Back-end/src/index.js"
   },
   "keywords": [],
   "author": "",

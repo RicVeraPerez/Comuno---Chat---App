@@ -7,9 +7,36 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173"],
+    origin: process.env.NODE_ENV === 'production'
+      ? process.env.CLIENT_URL
+      : 'http://localhost:5173',
+    methods: ["GET", "POST"],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+    exposedHeaders: ["Content-Length", "X-Requested-With"],
+    preflightContinue: false,
+    maxAge: 3600,
+    optionsSuccessStatus: 204,
+    handlePreflightRequest: (req, res) => {
+      res.writeHead(204, {
+        "Access-Control-Allow-Origin": process.env.NODE_ENV === 'production'
+          ? process.env.CLIENT_URL
+          : "http://localhost:5173",
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Credentials": "true",
+      });
+      res.end();
+    }
   },
+  transports: ["websocket", "polling"],
+  allowEIO3: true,
+  allowUpgrades: true,
+  upgrade: true,
+  pingTimeout: 60000,
+  pingInterval: 25000,
 });
+
 
 export function getReceiverSocketId(userId) {
   return userSocketMap[userId];
