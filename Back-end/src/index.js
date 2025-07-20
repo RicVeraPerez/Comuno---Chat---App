@@ -34,13 +34,6 @@ app.use(
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../Front-end/dist")));
-
-  app.get(/(.*)/, (req, res) => {
-    res.sendFile(path.join(__dirname, "../Front-end", "dist", "index.html"));
-  });
-}
 
 console.log("PORT env variable:", process.env.PORT);
 console.log("Listening on port:", PORT);

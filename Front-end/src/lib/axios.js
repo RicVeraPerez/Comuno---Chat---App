@@ -4,6 +4,6 @@ export const axiosInstance = axios.create({
   baseURL:
     import.meta.env.MODE === "development"
       ? "http://localhost:5001/api"
-      : "/api", // usa la misma URL del backend en producción
+      : import.meta.env.VITE_API_BASE_URL,
   withCredentials: true,
 });
