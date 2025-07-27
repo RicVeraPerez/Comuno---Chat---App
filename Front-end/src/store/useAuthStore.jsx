@@ -84,35 +84,36 @@ export const useAuthStore = create((set, get) => ({
   },
 
 connectSocket: () => {
-  const { authUser, socket } = get();
-  if (!authUser) return;
+  const { authUser } = get();
+  if (!authUser || get().socket?.connected) {
+    console.warn("Socket no conectado. authUser es:", authUser);
+    return;
+  }
 
-  // Evitar crear múltiples sockets
-  if (socket && socket.connected) return;
-
-  const newSocket = io(BASE_URL, {
-    transports: ["websocket", "polling"],
+  const socket = io(BASE_URL, {
     query: { userId: authUser._id },
+    transports: ["websocket", "polling"],
     withCredentials: true,
   });
 
-  set({ socket: newSocket });
+  socket.connect();
 
-  // Limpiar listeners previos por si hay reconexión
-  newSocket.off("getOnlineUsers");
+  socket.on("connect", () => {
+    console.log("Socket conectado correctamente:", socket.id);
+  });
 
-  newSocket.on("getOnlineUsers", (userIds) => {
+  socket.on("connect_error", (err) => {
+    console.error("Error al conectar el socket:", err.message);
+  });
+
+  socket.on("getOnlineUsers", (userIds) => {
+    console.log("Usuarios en línea recibidos:", userIds);
     set({ onlineUsers: userIds });
   });
 
-  newSocket.on("connect_error", (err) => {
-    console.error("Socket connection error:", err);
-  });
-
-  newSocket.on("disconnect", (reason) => {
-    console.log("Socket disconnected:", reason);
-  });
-},
+  set({ socket });
+}
+,
 
   disconnectSocket: () => {
     if (get().socket?.connected) get().socket.disconnect();
