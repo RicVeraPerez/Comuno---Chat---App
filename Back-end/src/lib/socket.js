@@ -37,13 +37,11 @@ const io = new Server(server, {
   pingInterval: 25000,
 });
 
+const userSocketMap = {};
 
 export function getReceiverSocketId(userId) {
   return userSocketMap[userId];
 }
-
-// used to store online users
-const userSocketMap = {}; // {userId: socketId}
 
 io.on("connection", (socket) => {
   console.log("A user connected", socket.id);
