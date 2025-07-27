@@ -64,11 +64,6 @@ if (ReceiverSocketId) {
   io.to(ReceiverSocketId).emit("newMessage", newMessage);
 }
 
-if (senderSocketId) {
-  io.to(senderSocketId).emit("newMessage", newMessage);
-}
-
-
     res.status(201).json(newMessage);
   } catch (error) {
     console.log("Error in sendMessage controller: ", error.message);

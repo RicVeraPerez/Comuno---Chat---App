@@ -3,7 +3,8 @@ import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
- const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5001";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5001";
+const SOCKET_BASE_URL = import.meta.env.VITE_SOCKET_BASE_URL || "http://localhost";
 
 
 export const useAuthStore = create((set, get) => ({
@@ -90,7 +91,7 @@ connectSocket: () => {
     return;
   }
 
-  const socket = io(BASE_URL, {
+  const socket = io(SOCKET_BASE_URL, {
     query: { userId: authUser._id },
     transports: ["websocket", "polling"],
     withCredentials: true,
@@ -119,3 +120,5 @@ connectSocket: () => {
     if (get().socket?.connected) get().socket.disconnect();
   },
 }));
+
+axiosInstance.defaults.baseURL = API_BASE_URL;
