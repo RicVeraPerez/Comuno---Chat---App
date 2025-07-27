@@ -23,24 +23,26 @@ export const useChatStore = create((set, get) => ({
   },
 
   getMessages: async (userId) => {
-    set({ isMessagesLoading: true });
-    try {
-      const res = await axiosInstance.get(`/messages/${userId}`);
-      set({ messages: res.data });
-    } catch (error) {
-      toast.error(error.response.data.message);
-    } finally {
-      set({ isMessagesLoading: false });
-    }
-  },
-  sendMessage: async (messageData) => {
-    const { selectedUser, messages } = get();
-    try {
-      const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);    
-    } catch (error) {
-      toast.error(error.response.data.message);
-    }
-  },
+  set({ isMessagesLoading: true });
+  try {
+    const res = await axiosInstance.get(`/messages/${userId}`);
+    set({ messages: res.data });
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Error al cargar mensajes");
+  } finally {
+    set({ isMessagesLoading: false });
+  }
+},
+
+sendMessage: async (messageData) => {
+  const { selectedUser } = get();
+  try {
+    await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
+    // No hacemos nada aquí, el socket emitirá y se recibirá por "newMessage"
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Error al enviar mensaje");
+  }
+},
 
 subscribeToMessages: () => {
   const socket = useAuthStore.getState().socket;
@@ -50,13 +52,18 @@ subscribeToMessages: () => {
     const { selectedUser, messages } = get();
 
     const isRelevant =
-      newMessage.senderId === selectedUser?._id || newMessage.receiverId === selectedUser?._id;
+      newMessage.senderId === selectedUser?._id ||
+      newMessage.receiverId === selectedUser?._id;
 
     if (!isRelevant) return;
+
+    const alreadyExists = messages.some((m) => m._id === newMessage._id);
+    if (alreadyExists) return;
 
     set({ messages: [...messages, newMessage] });
   });
 },
+
 
   unsubscribeFromMessages: () => {
     const socket = useAuthStore.getState().socket;
@@ -65,7 +72,7 @@ subscribeToMessages: () => {
 
   setSelectedUser: (selectedUser) => {
     get().unsubscribeFromMessages();
-    set({ selectedUser });
+    set({ selectedUser, messages: [] });
     get().getMessages(selectedUser._id);
     get().subscribeToMessages();
   }
