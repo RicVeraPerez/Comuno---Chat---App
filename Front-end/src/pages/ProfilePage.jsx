@@ -12,7 +12,7 @@ const ProfilePage = () => {
       console.log("Image aa gayiii")
       const file = e.target.files[0];
       console.log("file: ", file.size)
-      const maxSizeMB = 10; //Set the img size
+      const maxSizeMB = 10;
       const maxSizeInBytes = maxSizeMB * 1024 * 1024 ;
   
       if (file.size > maxSizeInBytes) {
@@ -43,7 +43,7 @@ const ProfilePage = () => {
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <img
-                src={selectedImg || authUser.profilePic || "/avatar.png"}
+                  src={selectedImg || authUser.profilePic || `${import.meta.env.BASE_URL}avatar.png`}
                 alt="Profile"
                 className="size-32 rounded-full object-cover border-4 "
               />
