@@ -4,8 +4,8 @@ import { useThemeStore } from '../store/useThemeStore'
 import { Send } from 'lucide-react'
 
 const PREVIEW_MESSAGES = [
-    {id: 1 , content: "Trava lindo o mina fea?", isSent: false},
-    {id: 2, content: "Trava feo", isSent: true}
+    {id: 1 , content: "Hola como estas? :)", isSent: false},
+    {id: 2, content: "Muy bien y tu? <3", isSent: true}
 ]
 
 
